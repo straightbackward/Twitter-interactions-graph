@@ -1,0 +1,6 @@
+###### Requirements without Version Specifiers ######
+flask
+
+
+###### Requirements with Version Specifiers ######
+tweepy == 4.4           
