@@ -41,11 +41,10 @@ def getAvatars(ids):
     return {user.id_str:user.profile_image_url_https.replace("normal", "400x400")  for user in res}
 
 def getUser(screen_name):
-    res = api.lookup_users(screen_name=screen_name, include_entities=False)
+    res = api.lookup_users(screen_name=[screen_name], include_entities=False)
     return {
 		"id": res[0].id_str,
 		"screen_name": res[0].screen_name,
 		"avatar": res[0].profile_image_url_https.replace("normal", "400x400"),
 	}
     
-# print(getAvatars('vaslolkhetab, hamed'))
