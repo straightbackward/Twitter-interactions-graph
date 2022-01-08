@@ -78,7 +78,7 @@ def getInteractions(screen_name, num_of_pages):
 
 def make_graph(user_screen_name):
     user = getUser(user_screen_name)
-    layer1 = getInteractions(user_screen_name.lower(), 4)[:10]
+    layer1 = getInteractions(user_screen_name.lower(), 4)[:20]
     layer2 = []
     nodes = {user["id"]: {"screen_name": user_screen_name, "layer": 1}}
     print(nodes)
@@ -87,18 +87,28 @@ def make_graph(user_screen_name):
         print(node_l1['screen_name'], '\n')
         nodes[node_l1["id"]] = {"screen_name": node_l1['screen_name'], "layer": 2}
         edges.append({"from": user_screen_name, "to": node_l1['screen_name']})
-        layer2.append(getInteractions(node_l1['screen_name'].lower(), 2)[:5])
-        for node_l2 in layer2[i]:
-            print(node_l2, ', ')
-            if node_l2["id"] not in nodes:
-                nodes[node_l2["id"]] = {"screen_name": node_l2['screen_name'], "layer": 3}
-            edges.append({"from": node_l1['screen_name'], "to": node_l2['screen_name']})
-
+        if i<11:
+            layer2.append(getInteractions(node_l1['screen_name'].lower(), 2)[:10])
+            for node_l2 in layer2[i]:
+                print(node_l2, ', ')
+                if node_l2["id"] not in nodes:
+                    nodes[node_l2["id"]] = {"screen_name": node_l2['screen_name'], "layer": 3}
+                edges.append({"from": node_l1['screen_name'], "to": node_l2['screen_name']})
+    
     avatars = getAvatars(nodes.keys())
     for key in list(nodes.keys()):
+        degree = 0
+        for edge in edges:
+            if edge["to"] == nodes[key]["screen_name"] or edge["from"] == nodes[key]["screen_name"]:
+                degree +=1
+        print(nodes[key]["screen_name"], degree)
+        if degree <= 1:
+            del nodes[key]
+            continue
         # change key name "screen_name" to "id" to use the array straightforward in front
         nodes[key]["id"] = nodes[key]["screen_name"]
         del nodes[key]["screen_name"]
+        
         
         # add avatars
         try:
@@ -110,6 +120,3 @@ def make_graph(user_screen_name):
         "nodes": list(nodes.values()),
         "edges": edges
     }
-
-
-make_graph('vaslolkhetab')
