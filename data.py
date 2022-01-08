@@ -81,6 +81,7 @@ def make_graph(user_screen_name):
     layer1 = getInteractions(user_screen_name.lower(), 4)[:10]
     layer2 = []
     nodes = {user["id"]: {"screen_name": user_screen_name, "layer": 1}}
+    print(nodes)
     edges = []
     for i, node_l1 in enumerate(layer1):
         print(node_l1['screen_name'], '\n')
@@ -95,6 +96,11 @@ def make_graph(user_screen_name):
 
     avatars = getAvatars(nodes.keys())
     for key in list(nodes.keys()):
+        # change key name "screen_name" to "id" to use the array straightforward in front
+        nodes[key]["id"] = nodes[key]["screen_name"]
+        del nodes[key]["screen_name"]
+        
+        # add avatars
         try:
             nodes[key]["image"] = avatars[key]
         except:
@@ -106,3 +112,4 @@ def make_graph(user_screen_name):
     }
 
 
+make_graph('vaslolkhetab')
