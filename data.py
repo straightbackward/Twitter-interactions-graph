@@ -95,8 +95,9 @@ def make_graph(user_screen_name):
                     nodes[node_l2["id"]] = {"screen_name": node_l2['screen_name'], "layer": 3}
                 edges.append({"from": node_l1['screen_name'], "to": node_l2['screen_name']})
     
-    avatars = getAvatars(nodes.keys())
+    print('before pruning: ',len(nodes.keys()))
     for key in list(nodes.keys()):
+        #remove nodes with degree 0 (pruning)
         degree = 0
         for edge in edges:
             if edge["to"] == nodes[key]["screen_name"] or edge["from"] == nodes[key]["screen_name"]:
@@ -105,10 +106,12 @@ def make_graph(user_screen_name):
         if degree <= 1:
             del nodes[key]
             continue
+    print('after pruning: ',len(nodes.keys()))
+    avatars = getAvatars(nodes.keys())
+    for key in list(nodes.keys()):
         # change key name "screen_name" to "id" to use the array straightforward in front
         nodes[key]["id"] = nodes[key]["screen_name"]
         del nodes[key]["screen_name"]
-        
         
         # add avatars
         try:
