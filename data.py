@@ -43,11 +43,6 @@ def countRetweets(interactions, timeline, screen_name):
       
    
 
-  
-# addRecord(interactions, 'vaslolkhetab', 1111111, 'retweet')
-# addRecord(interactions, 'vaslolkhetab', 1111111, 'retweet')
-# print(interactions)
-
 
 
 

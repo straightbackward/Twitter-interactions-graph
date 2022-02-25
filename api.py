@@ -1,12 +1,4 @@
-import requests
-import os
-import json
-import logging
-import time
 import tweepy
-import os
-os.environ['http_proxy'] = 'http://127.0.0.1:33977'
-os.environ['https_proxy'] = 'http://127.0.0.1:33977' 
 
 
 

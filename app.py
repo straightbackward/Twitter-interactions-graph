@@ -1,6 +1,6 @@
 from flask import Flask
-from flask import jsonify
 from data import make_graph
+
 app = Flask(__name__)
 
 @app.route("/<screen_name>")
