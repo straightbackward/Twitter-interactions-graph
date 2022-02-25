@@ -1,5 +1,4 @@
 import requests
-import os
 import json
 import logging
 import time
@@ -7,6 +6,8 @@ import tweepy
 import os
 os.environ['http_proxy'] = 'http://127.0.0.1:33977'
 os.environ['https_proxy'] = 'http://127.0.0.1:33977' 
+
+
 
 
 
@@ -25,14 +26,16 @@ api = tweepy.API(auth)
 
 def getTimeline(screen_name, num_of_pages):
     timeline = []
-    res = tweepy.Cursor(api.user_timeline, screen_name=screen_name,
+    try:
+        res = tweepy.Cursor(api.user_timeline, screen_name=screen_name,
                             count=200).pages(num_of_pages)
-    for page in res:
-        print(len(page))
-        for post in page:
-            timeline.append(post)
+        for page in res:
+            print(len(page))
+            for post in page:
+                timeline.append(post)
      
-    
+    except:
+        return 'private'
     return timeline
 
 
@@ -41,10 +44,15 @@ def getAvatars(ids):
     return {user.id_str:user.profile_image_url_https.replace("normal", "400x400")  for user in res}
 
 def getUser(screen_name):
-    res = api.lookup_users(screen_name=[screen_name], include_entities=False)
+    print('id ', screen_name )
+    try:
+        res = api.lookup_users(screen_name=[screen_name], include_entities=False)
+    except tweepy.errors.HTTPException:
+        return 404
+    except:
+        return 'problem'
     return {
 		"id": res[0].id_str,
 		"screen_name": res[0].screen_name,
 		"avatar": res[0].profile_image_url_https.replace("normal", "400x400"),
 	}
-    
