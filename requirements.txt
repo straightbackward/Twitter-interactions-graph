@@ -3,4 +3,4 @@ flask
 
 
 ###### Requirements with Version Specifiers ######
-tweepy == 4.4           
+tweepy == 4.6         
