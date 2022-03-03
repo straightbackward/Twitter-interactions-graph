@@ -1,24 +1,18 @@
+import resource
 import requests
 import json
 import logging
 import time
 import tweepy
+import math
 import os
-os.environ['http_proxy'] = 'http://127.0.0.1:33977'
-os.environ['https_proxy'] = 'http://127.0.0.1:33977' 
+# os.environ['http_proxy'] = 'http://127.0.0.1:33977'
+# os.environ['https_proxy'] = 'http://127.0.0.1:33977' 
 
 
 
 
-
-
-
-
-
-consumer_key = "Fg5AoQNjh7vAGbD1335DpUI3f"
-consumer_secret = "QX8miw5x5Z8BMrLAX3GMn0d7oQ6GpxoxkbhMerz3DYY690FMkQ"
-
-auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+auth = tweepy.OAuth2BearerHandler("AAAAAAAAAAAAAAAAAAAAAEDVPgEAAAAAml%2FCoV9VHPYULHiwF5%2FZJZOn3OQ%3DLMmUgmLlGq7pGWqur9GBdVxBuZrDZhOm3pn9ZvH9oT7yMdbf7O")
 
 
 api = tweepy.API(auth)
