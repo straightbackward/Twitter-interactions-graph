@@ -10,8 +10,6 @@ import os
 # os.environ['https_proxy'] = 'http://127.0.0.1:33977' 
 
 
-
-
 auth = tweepy.OAuth2BearerHandler("AAAAAAAAAAAAAAAAAAAAAEDVPgEAAAAAml%2FCoV9VHPYULHiwF5%2FZJZOn3OQ%3DLMmUgmLlGq7pGWqur9GBdVxBuZrDZhOm3pn9ZvH9oT7yMdbf7O")
 
 
@@ -50,3 +48,11 @@ def getUser(screen_name):
 		"screen_name": res[0].screen_name,
 		"avatar": res[0].profile_image_url_https.replace("normal", "400x400"),
 	}
+
+
+
+def free_slots():
+    status = api.rate_limit_status(resources="statuses")
+    remaining_resource = status['resources']['statuses']['/statuses/user_timeline']['remaining']
+    return math.floor(remaining_resource/26)
+
