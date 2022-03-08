@@ -22,7 +22,6 @@ def getTimeline(screen_name, num_of_pages):
         res = tweepy.Cursor(api.user_timeline, screen_name=screen_name,
                             count=200).pages(num_of_pages)
         for page in res:
-            print(len(page))
             for post in page:
                 timeline.append(post)
      
@@ -54,5 +53,5 @@ def getUser(screen_name):
 def free_slots():
     status = api.rate_limit_status(resources="statuses")
     remaining_resource = status['resources']['statuses']['/statuses/user_timeline']['remaining']
-    return math.floor(remaining_resource/26)
+    return str(math.floor(remaining_resource/26))
 

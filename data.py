@@ -89,10 +89,8 @@ def make_graph(user_screen_name):
         abort(500)
     layer1 = getInteractions(user_screen_name.lower(), 4)[:30]
     nodes = {user["id"]: {"screen_name": user_screen_name, "layer": 1}}
-    print(nodes)
     edges = []
     for i, node_l1 in enumerate(layer1):
-        print(node_l1['screen_name'], '\n')
         nodes[node_l1["id"]] = {"screen_name": node_l1['screen_name'], "layer": 2}
         edges.append({"from": user_screen_name, "to": node_l1['screen_name']})
         if i<11:
@@ -100,7 +98,6 @@ def make_graph(user_screen_name):
             if interactions == 'private':
                 continue
             for node_l2 in interactions:
-                print(node_l2, ', ')
                 if node_l2["id"] not in nodes:
                     nodes[node_l2["id"]] = {"screen_name": node_l2['screen_name'], "layer": 3}
                 edges.append({"from": node_l1['screen_name'], "to": node_l2['screen_name']})
@@ -112,7 +109,6 @@ def make_graph(user_screen_name):
         for edge in edges:
             if edge["to"] == nodes[key]["screen_name"] or edge["from"] == nodes[key]["screen_name"]:
                 degree +=1
-        print(nodes[key]["screen_name"], degree)
         if degree <= 1:
             del nodes[key]
             continue
