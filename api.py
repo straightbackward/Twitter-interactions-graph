@@ -35,7 +35,7 @@ def getAvatars(ids):
     return {user.id_str:user.profile_image_url_https.replace("normal", "400x400")  for user in res}
 
 def getUser(screen_name):
-    print('id ', screen_name )
+    print('user_id_log ', screen_name )
     try:
         res = api.lookup_users(screen_name=[screen_name], include_entities=False)
     except tweepy.errors.HTTPException:
