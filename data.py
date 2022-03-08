@@ -1,5 +1,6 @@
+from re import A
 from api import *
-
+from flask import abort
 
 def addRecord(interactions, screen_name, user_id, type):
     if (user_id in interactions):
@@ -48,6 +49,8 @@ def countRetweets(interactions, timeline, screen_name):
 
 def getInteractions(screen_name, num_of_pages):
     timeline = (getTimeline(screen_name, num_of_pages))
+    if timeline == 'private':
+        return 'private'
     interactions = {}
 
     countReplies(interactions, timeline, screen_name)
@@ -73,19 +76,23 @@ def getInteractions(screen_name, num_of_pages):
 
 def make_graph(user_screen_name):
     user = getUser(user_screen_name)
-    layer1 = getInteractions(user_screen_name.lower(), 4)[:20]
-    layer2 = []
+    if user == 404:
+        print('abort 404')
+        abort(404)
+    elif user == 'problem':
+        print('abort 500')
+        abort(500)
+    layer1 = getInteractions(user_screen_name.lower(), 4)[:30]
     nodes = {user["id"]: {"screen_name": user_screen_name, "layer": 1}}
-    print(nodes)
     edges = []
     for i, node_l1 in enumerate(layer1):
-        print(node_l1['screen_name'], '\n')
         nodes[node_l1["id"]] = {"screen_name": node_l1['screen_name'], "layer": 2}
         edges.append({"from": user_screen_name, "to": node_l1['screen_name']})
         if i<11:
-            layer2.append(getInteractions(node_l1['screen_name'].lower(), 2)[:10])
-            for node_l2 in layer2[i]:
-                print(node_l2, ', ')
+            interactions = getInteractions(node_l1['screen_name'].lower(), 2)[:15]
+            if interactions == 'private':
+                continue
+            for node_l2 in interactions:
                 if node_l2["id"] not in nodes:
                     nodes[node_l2["id"]] = {"screen_name": node_l2['screen_name'], "layer": 3}
                 edges.append({"from": node_l1['screen_name'], "to": node_l2['screen_name']})
@@ -97,7 +104,6 @@ def make_graph(user_screen_name):
         for edge in edges:
             if edge["to"] == nodes[key]["screen_name"] or edge["from"] == nodes[key]["screen_name"]:
                 degree +=1
-        print(nodes[key]["screen_name"], degree)
         if degree <= 1:
             del nodes[key]
             continue
