@@ -76,13 +76,16 @@ def getInteractions(screen_name, num_of_pages):
 
 def make_graph(user_screen_name):
     user = getUser(user_screen_name)
+    print()
     if user == 404:
         print('abort 404')
-        abort(404)
+        return {'error': 'The user does not exists.'}
     elif user == 'problem':
         print('abort 500')
         abort(500)
     layer1 = getInteractions(user_screen_name.lower(), 4)[:30]
+    if layer1 == 'private':
+        return {'error': 'The user is private.'}
     nodes = {user["id"]: {"screen_name": user_screen_name, "layer": 1}}
     edges = []
     for i, node_l1 in enumerate(layer1):
