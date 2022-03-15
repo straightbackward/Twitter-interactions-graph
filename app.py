@@ -4,7 +4,7 @@ from data import make_graph
 from api import free_slots
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": ["https://www.sociogame.net"]}})
 
 
 @app.route("/user/<screen_name>")
