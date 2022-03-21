@@ -1,6 +1,10 @@
 from re import A
 from api import *
 from flask import abort
+import boto3
+from db import put_into_db
+
+
 
 def addRecord(interactions, screen_name, user_id, type):
     if (user_id in interactions):
@@ -76,13 +80,15 @@ def getInteractions(screen_name, num_of_pages):
 
 def make_graph(user_screen_name):
     user = getUser(user_screen_name)
-    print()
+    
     if user == 404:
         print('abort 404')
         return {'error': 'The user does not exists.'}
     elif user == 'problem':
         print('abort 500')
         abort(500)
+
+    put_into_db(user)
     layer1 = getInteractions(user_screen_name.lower(), 4)[:30]
     if layer1 == 'private':
         return {'error': 'The user is private.'}
@@ -124,6 +130,8 @@ def make_graph(user_screen_name):
             nodes[key]["image"] = avatars[key]
         except:
             del nodes[key]
+
+        
 
     return {
         "nodes": list(nodes.values()),
