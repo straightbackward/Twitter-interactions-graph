@@ -2,7 +2,9 @@ from re import A
 from api import *
 from flask import abort
 import boto3
-from db import put_into_db
+from db import db_async_handler,put_into_db
+import time 
+import asyncio
 
 
 
@@ -79,16 +81,15 @@ def getInteractions(screen_name, num_of_pages):
 
 
 def make_graph(user_screen_name):
+    start = time.time()
     user = getUser(user_screen_name)
-    
     if user == 404:
         print('abort 404')
         return {'error': 'The user does not exists.'}
     elif user == 'problem':
         print('abort 500')
         abort(500)
-
-    put_into_db(user)
+    # put_into_db(user)
     layer1 = getInteractions(user_screen_name.lower(), 4)[:30]
     if layer1 == 'private':
         return {'error': 'The user is private.'}
@@ -132,6 +133,10 @@ def make_graph(user_screen_name):
             del nodes[key]
 
         
+    end = time.time()
+    execution_time = end - start
+    print('execution time: ', execution_time)
+    asyncio.run(db_async_handler(user, round(execution_time, 2)))
 
     return {
         "nodes": list(nodes.values()),
