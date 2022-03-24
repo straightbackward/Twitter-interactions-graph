@@ -1,8 +1,7 @@
 from re import A
 from api import *
 from flask import abort
-import boto3
-from db import db_async_handler,put_into_db
+from db import db_async_handler
 import time 
 import asyncio
 
