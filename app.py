@@ -14,5 +14,5 @@ def network_graph(screen_name):
 
 @app.route("/slots")
 def limit():
-    return free_slots()
+    return str(free_slots())
 
