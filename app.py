@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
 from data import make_graph
-from api import free_slots
+from api import max_free_slots
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": ["https://www.sociogame.net"]}})
@@ -14,5 +14,5 @@ def network_graph(screen_name):
 
 @app.route("/slots")
 def limit():
-    return str(free_slots())
+    return str(max_free_slots())
 

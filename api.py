@@ -2,9 +2,35 @@ import tweepy
 import math
 import os
 
-bearer_token = os.environ['BEARER_TOKEN']
-auth = tweepy.OAuth2BearerHandler(bearer_token)
-api = tweepy.API(auth)
+
+
+def free_slots(api):
+    try:
+        status = api.rate_limit_status(resources="statuses")
+        remaining_resource = status['resources']['statuses']['/statuses/user_timeline']['remaining']
+        slots = math.floor(remaining_resource/26)
+        print(slots)
+    except: 
+        slots = 0
+    return slots
+
+
+def max_free_slots():
+    global api
+    bearer_token = os.environ['BEARER_TOKEN']
+    auth = tweepy.OAuth2BearerHandler(bearer_token)
+    api = tweepy.API(auth)
+    slots = free_slots(api)
+    if slots < 1:
+        bearer_token = os.environ['SECONDARY_BEARER_TOKEN']
+        auth = tweepy.OAuth2BearerHandler(bearer_token)
+        api = tweepy.API(auth)
+        slots = free_slots(api)
+    return slots
+
+
+max_free_slots()
+
 
 def getTimeline(screen_name, num_of_pages):
     timeline = []
@@ -38,20 +64,3 @@ def getUser(screen_name):
 	}
 
 
-
-def free_slots():
-    global api
-    status = api.rate_limit_status(resources="statuses")
-    remaining_resource = status['resources']['statuses']['/statuses/user_timeline']['remaining']
-    slots = math.floor(remaining_resource/26)
-    print(slots)
-    if slots < 1:
-        bearer_token = os.environ['SECONDARY_BEARER_TOKEN']
-        auth = tweepy.OAuth2BearerHandler(bearer_token)
-        api = tweepy.API(auth)
-        status = api.rate_limit_status(resources="statuses")
-        remaining_resource = status['resources']['statuses']['/statuses/user_timeline']['remaining']
- 
-        slots = math.floor(remaining_resource/26)
-
-    return slots
