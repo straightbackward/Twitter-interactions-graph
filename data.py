@@ -91,7 +91,7 @@ def make_graph(user_screen_name):
     # put_into_db(user)
     layer1 = getInteractions(user_screen_name.lower(), 4)[:30]
     if layer1 == 'private':
-        return {'error': 'An error occurred. Try later.'}
+        return {'error': 'An error occurred while send request to Twitter API. Try later.'}
     nodes = {user["id"]: {"screen_name": user_screen_name, "layer": 1}}
     edges = []
     for i, node_l1 in enumerate(layer1):
