@@ -1,12 +1,10 @@
 import tweepy
 import math
+import os
 
-
-auth = tweepy.OAuth2BearerHandler("AAAAAAAAAAAAAAAAAAAAAEDVPgEAAAAAml%2FCoV9VHPYULHiwF5%2FZJZOn3OQ%3DLMmUgmLlGq7pGWqur9GBdVxBuZrDZhOm3pn9ZvH9oT7yMdbf7O")
-
-
+bearer_token = os.environ['BEARER_TOKEN']
+auth = tweepy.OAuth2BearerHandler(bearer_token)
 api = tweepy.API(auth)
-
 
 def getTimeline(screen_name, num_of_pages):
     timeline = []
@@ -16,7 +14,6 @@ def getTimeline(screen_name, num_of_pages):
         for page in res:
             for post in page:
                 timeline.append(post)
-     
     except:
         return 'private'
     return timeline
