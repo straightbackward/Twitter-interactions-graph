@@ -1,10 +1,11 @@
 import tweepy
 import math
 import os
-
-
+from dotenv import load_dotenv
+load_dotenv()
 
 def free_slots(api):
+    print("free_slots")
     try:
         status = api.rate_limit_status(resources="statuses")
         remaining_resource = status['resources']['statuses']['/statuses/user_timeline']['remaining']
@@ -15,21 +16,27 @@ def free_slots(api):
     return slots
 
 
-def max_free_slots():
+
+def all_remaining_slots():
     global api
-    bearer_token = os.environ['BEARER_TOKEN']
-    auth = tweepy.OAuth2BearerHandler(bearer_token)
-    api = tweepy.API(auth)
-    slots = free_slots(api)
-    if slots < 1:
-        bearer_token = os.environ['SECONDARY_BEARER_TOKEN']
-        auth = tweepy.OAuth2BearerHandler(bearer_token)
-        api = tweepy.API(auth)
-        slots = free_slots(api)
-    return slots
+    bearer_token1 = os.getenv('BEARER_TOKEN')
+    bearer_token2 = os.getenv('SECONDARY_BEARER_TOKEN')
 
+    auth1 = tweepy.OAuth2BearerHandler(bearer_token1)
+    auth2 = tweepy.OAuth2BearerHandler(bearer_token2)
 
-max_free_slots()
+    api1 = tweepy.API(auth1)
+    api2 = tweepy.API(auth2)
+
+    slots1 = free_slots(api1)
+    slots2 = free_slots(api2)
+    print('slots1: ',slots1)
+    print('slots2: ',slots2)
+    if slots1 > slots2:
+        api = api1
+    else:
+        api = api2
+    return slots1 + slots2
 
 
 def getTimeline(screen_name, num_of_pages):
