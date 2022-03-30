@@ -1,8 +1,7 @@
 import tweepy
 import math
 import os
-from dotenv import load_dotenv
-load_dotenv()
+
 
 def free_slots(api):
     print("free_slots")
@@ -23,8 +22,9 @@ def free_slots(api):
 
 def all_remaining_slots():
     global api
-    bearer_token1 = os.getenv('BEARER_TOKEN')
-    bearer_token2 = os.getenv('SECONDARY_BEARER_TOKEN')
+    bearer_token1 = os.environ['BEARER_TOKEN']
+    bearer_token2 = os.environ['SECONDARY_BEARER_TOKEN']
+
 
     auth1 = tweepy.OAuth2BearerHandler(bearer_token1)
     auth2 = tweepy.OAuth2BearerHandler(bearer_token2)
