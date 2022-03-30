@@ -9,11 +9,13 @@ CORS(app, resources={r"/*": {"origins": ["https://www.sociogame.net"]}})
 
 @app.route("/user/<screen_name>")
 def network_graph(screen_name):
-    all_remaining_slots()
+    slots = all_remaining_slots()
+    if slots is dict:
+        return {"error": "Sorry! We reached Twitter limit. Try Later."}
     return make_graph(screen_name)
 
 
 @app.route("/slots")
 def limit():
-    return str(all_remaining_slots())
+    return all_remaining_slots()
 
