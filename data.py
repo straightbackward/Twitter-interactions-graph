@@ -117,7 +117,7 @@ def make_graph(user_screen_name):
             del nodes[key]
             continue
     if len(nodes) == 0:
-        return {'error': 'Your interactions rate is too low to make a graph.'}
+        return {'error': 'Your interaction rate is too low to make a graph.'}
     print('after pruning: ',len(nodes.keys()))
     avatars = getAvatars(nodes.keys())
     for key in list(nodes.keys()):
