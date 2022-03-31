@@ -8,14 +8,18 @@ def free_slots(api):
     print("free_slots")
     try:
         status = api.rate_limit_status(resources="statuses")
-        remaining_resource = status['resources']['statuses']['/statuses/user_timeline']['remaining']
+        resource = status['resources']['statuses']['/statuses/user_timeline']
+        remaining_resource = resource['remaining']
+        reset_time = resource['reset']
         slots = math.floor(remaining_resource/26)
-        print(slots)
+        print(slots, reset_time)
     except: 
         slots = 0
-    return slots
+    return slots, reset_time
 
 
+
+    
 
 def all_remaining_slots():
     global api
@@ -28,16 +32,18 @@ def all_remaining_slots():
     api1 = tweepy.API(auth1)
     api2 = tweepy.API(auth2)
 
-    slots1 = free_slots(api1)
-    slots2 = free_slots(api2)
+    slots1, reset1 = free_slots(api1)
+    slots2, reset2 = free_slots(api2)
     print('slots1: ',slots1)
     print('slots2: ',slots2)
+    if slots1 + slots2 < 1:
+        reset_time = min([reset1, reset2])
+        return {'reset': reset_time}
     if slots1 > slots2:
         api = api1
     else:
         api = api2
-    return slots1 + slots2
-
+    return {'free': slots1 + slots2}
 
 def getTimeline(screen_name, num_of_pages):
     timeline = []
