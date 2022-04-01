@@ -1,11 +1,10 @@
 import tweepy
 import math
 import os
-from dotenv import load_dotenv
-load_dotenv()
 
 def free_slots(api):
     print("free_slots")
+
     try:
         status = api.rate_limit_status(resources="statuses")
         resource = status['resources']['statuses']['/statuses/user_timeline']
@@ -13,11 +12,13 @@ def free_slots(api):
         reset_time = resource['reset']
         slots = math.floor(remaining_resource/26)
         print(slots, reset_time)
-    except: 
+    except:
         slots = 0
+        reset1 = int(os.getenv('RESET_TIME1'))
+        reset2 = int(os.getenv('RESET_TIME2'))
+        reset_time = min([reset1, reset2])
+
     return slots, reset_time
-
-
 
     
 
@@ -36,6 +37,11 @@ def all_remaining_slots():
     slots2, reset2 = free_slots(api2)
     print('slots1: ',slots1)
     print('slots2: ',slots2)
+
+    os.environ['RESET_TIME1'] = str(reset1)
+    os.environ['RESET_TIME2'] = str(reset2)
+
+
     if slots1 + slots2 < 1:
         reset_time = min([reset1, reset2])
         return {'reset': reset_time}
