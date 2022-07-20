@@ -23,6 +23,7 @@ pip-tools==6.5.1
 pkg_resources==0.0.0
 placebo==0.10.0
 python-dateutil==2.8.2
+python-dotenv==0.20.0
 python-slugify==5.0.2
 PyYAML==6.0
 requests==2.26.0
@@ -39,5 +40,5 @@ typing_extensions==4.0.1
 urllib3==1.26.7
 Werkzeug==2.0.2
 wsgi-request-logger==0.4.6
-zappa==0.54.1
+zappa==0.54.2
 zipp==3.7.0
