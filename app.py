@@ -2,6 +2,7 @@ from flask import Flask
 from flask_cors import CORS
 from data import make_graph
 from api import all_remaining_slots
+from flask import request
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": ["https://www.sociogame.net"]}})
@@ -19,3 +20,7 @@ def network_graph(screen_name):
 def limit():
     return all_remaining_slots()
 
+@app.route("/purchase", methods = ['POST'])
+def purchase():
+    data = request.form
+    return data
