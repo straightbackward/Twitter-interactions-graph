@@ -5,7 +5,7 @@ from api import all_remaining_slots
 from flask import request
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": ["https://www.sociogame.net"]}})
+# CORS(app, resources={r"/*": {"origins": ["https://www.sociogame.net"]}})
 
 
 @app.route("/user/<screen_name>")
