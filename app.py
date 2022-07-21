@@ -7,7 +7,7 @@ from flask import request
 from db import put_sale, get_sale
 
 app = Flask(__name__)
-# CORS(app, resources={r"/*": {"origins": ["https://www.sociogame.net"]}})
+CORS(app, resources={r"/*": {"origins": ["*"]}})
 
 
 @app.route("/user/<screen_name>")
