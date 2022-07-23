@@ -22,8 +22,15 @@ def free_slots(api):
 
     
 
-def all_remaining_slots():
+def all_remaining_slots(premium=False):
     global api
+    
+    if premium:
+        bearer_token = os.environ['PREMIUM_BEARER_TOKEN']
+        auth = tweepy.OAuth2BearerHandler(bearer_token)
+        api = tweepy.API(auth)
+        return
+
     bearer_token1 = os.environ['BEARER_TOKEN']
     bearer_token2 = os.environ['SECONDARY_BEARER_TOKEN']
 
