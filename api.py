@@ -23,10 +23,14 @@ def free_slots(api):
     
 
 def all_remaining_slots(premium=False):
+    # fake limit page
+    # now = time.time()
+    # five_minutes_later = now + 60*5                                     
+    # return {'reset': five_minutes_later}
     global api
-
+    
     if premium:
-        bearer_token = os.environ['BEARER_TOKEN']
+        bearer_token = os.environ['PREMIUM_BEARER_TOKEN']
         auth = tweepy.OAuth2BearerHandler(bearer_token)
         api = tweepy.API(auth)
         return
