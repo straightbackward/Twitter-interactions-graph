@@ -4,6 +4,7 @@ from flask import abort
 from db import db_async_handler
 import time 
 import asyncio
+import config
 
 
 
@@ -64,8 +65,8 @@ def getInteractions(screen_name, num_of_pages):
     
     for id, interaction in interactions.items():
         total = 0
-        total += interaction['reply'] * 1.1
-        total += interaction['retweet'] * 1.3
+        total += interaction['reply'] * config.MENTION_COEFFICIENT
+        total += interaction['retweet'] * config.RETWEET_COEFFICIENT
 
         tally.append({
             "id": interaction['id'],
@@ -83,13 +84,11 @@ def make_graph(user_screen_name):
     start = time.time()
     user = getUser(user_screen_name)
     if user == 404:
-        print('abort 404')
         return {'error': 'The user does not exists.'}
     elif user == 'problem':
-        print('abort 500')
         abort(500)
     # put_into_db(user)
-    layer1 = getInteractions(user_screen_name.lower(), 4)[:30]
+    layer1 = getInteractions(user_screen_name.lower(), config.LAYER1_NUM_OF_PAGE)[:config.LAYER2_NUM_OF_NODES]
     if layer1 == 'private':
         return {"error": "We don't have access to private accounts data."}
     nodes = {user["id"]: {"screen_name": user_screen_name, "layer": 1}}
@@ -97,8 +96,8 @@ def make_graph(user_screen_name):
     for i, node_l1 in enumerate(layer1):
         nodes[node_l1["id"]] = {"screen_name": node_l1['screen_name'], "layer": 2}
         edges.append({"from": user_screen_name, "to": node_l1['screen_name']})
-        if i<11:
-            interactions = getInteractions(node_l1['screen_name'].lower(), 2)[:15]
+        if i<=config.NUM_OF_FRUITFUL_NODES:
+            interactions = getInteractions(node_l1['screen_name'].lower(), config.LAYER2_NUM_OF_PAGE)[:config.LAYER2_NUM_OF_NODES]
             if interactions == 'private':
                 continue
             for node_l2 in interactions:
